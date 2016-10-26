@@ -1,0 +1,89 @@
+0. So you want to datamine the Rift PTS client. 
+* Bad news: Unlike most other games there are no automated tools developed for doing this or even a suite of tools to do this. This is because Trion by happenstance, design, or both made this a mess to reverse.
+* Good news: I have gathered a collection of tools and scripts to help with this. It is still a nyaning mess =v.v=
+* Caveat: I do all of this on Windows 8.1 64bit. If something doesn't work then it might be time to update from Windows XP to either Win8 or Linux =^.^=
+
+1. What you will need:
+* -Notification that a patch is coming. Use the URL the patcher uses (http://update2.triongames.com/ch1-live-streaming-client-patch/public/ch1-pts.txt)
+* -QuickBMS (http://aluigi.altervista.org/quickbms.htm) or direct download (http://aluigi.altervista.org/papers/quickbms.zip)
+o All scripts were tested with 0.5.31a so make sure you are using that or newer. 
+o The GUI is trash. 
+o Command line or batch files = ezmode.
+* -NifSkope (http://niftools.sourceforge.net/wiki/NifSkope)
+o Use the newest stable
+* -Any image viewer that is better than your built-in one. I use irfanview (http://www.irfanview.com/) I use the plugins too but they are not needed for this.
+o As long as the viewer can handle PNG, JPEG, and DDS it should be fine.
+* -bnkextr, ima_rejigger2, revorb, wav2ogg, ww2ogg, wwise_ima_adpcm, plus a simple audio editor like Audacity (http://audacity.sourceforge.net/), MediaInfo is somewhat helpful too
+o I have included the hard to find ones.
+* -QuickBMS scripts to process the LZMA, PAK, and Assets files.
+o Included because reversing is hard
+* -Flash decompiler of your choice
+* -Brain because directions require understanding and action. Also, these are pretty poor directions =v.v=
+CHALLENGE MODE: Hexeditor for memdumps and debugger for live work.
+SUPER CHALLENGE MODE:http://forum.xentax.com/viewtopic.php?f=10&t=11269
+SUPER-DUPER CHALLENGE MODE: Get Magelo to help you when working on Rift exe data dumping instead of telling you your question.
+"Hi TehFrank.
+It took a lot of RE work on the executable, that's where you will find your answers."
+=>.>= So helpful.
+
+2. Getting the files
+   a) The "hard" way
+1. Let the patcher download the updates and then open ALL of the asset files with the quickbms script and examine files
+2. Pros: No need to screw with permissions and downloading missed/deleted files that the patcher messed with
+3. Cons: everyone's asset paks are different (see xentax link above for why this is), paks change with every update too.
+       b) The "easier" way
+1. Let the patcher download the updates but then examine the log file and redownload all of the paks that it did
+2. This requires reading over the log files that Glyph generates (x:\users\YOURACCOUNT\AppData\Local\Glyph\Logs)
+3. Look for "Selected" lines for what files the patcher is downloading
+4. Before Glyph, this required that you copy the contents of the cookie that was being used by the patcher into your browser, but is no longer needed!
+       c) The "easiest" way
+1. Before doing anything, modify the access to the \Download folder. Remove all users. Add the user "Everyone". Give "Everyone" full control
+2. Let the patcher download the first part (~22MB) then STOP it before it gets more than 1MB into the next part. 
+3. Go to your Rift folder and open the "Download" folder. Change the permissions for the contents of "Download" that "Everyone" has by removing "Full Control" and "Modify".
+4. Let the patcher finish.
+5. Change the permissions back to "Full Control" (because the patcher fucks up if it cant delete the first few files it downloads [e.g., manifest file]) or have problems when doing more updates
+
+3. Working with files
+-LZMA2 files need to be extracted into the parent .PAK files (Using the named script for LZMA2)
+-PAK files need to be extracted too (Using the named script for PAK)
+-File types: 
+* dds - image
+* jpg - image
+* bmp - image
+* png - image
+* dat - unknown but seems to contain world building/model/texture data
+* ini - unknown but seems to contain model information
+* wav - Audio (see 4)
+* bkh - Audio (see 4)
+* nif - model/animation/wireframe data. Ones that don't appear to contain anything are likely texture/model blobs.
+* fxo - dunno
+* gfx - actually flash animations (see 5)
+* wawv - Havok Engine physics files
+
+4. Working with Audio files
+bkh are actually bnk files and can be extracted WITH NAMES using bnkextr. There is also a QuickBMS script that will not keep names but will rename based upon extension.
+NOTE: ogg-like files extracted are missing loop points because the tools do not extract/process these.
+NOTE: wav-like files extracted might not be encoded correctly and might need to be played with before sounding 100% like it does in game.
+NOTE: Not all bkh are in the proper format and will simply fail silently 
+wav - use ww2ogg --pcb packed_codebooks.bin then revorb
+wav - and NOT PLAYABLE/CONVERTABLE AND if codec ID 2 use either imma_rejigger2 or wwise_ima_adpcm
+wav - still nothing? My best guess is ATRAC3/ATRAC3+ and good luck with that
+
+5. "Working" with Flash files
+1. Change header from GFX to FWS. rename extension to swf
+2. Open in decompiler
+3. Be amazed at all the missing graphics (because they are not a part of the file) and just poke around the strings.
+
+6. Dataming the memdump
+1. Either attach a debugger (hard-way) or use windows builtin feature (easy) [click process in task manager -> Create Dump -> GG]
+2. Open in hexeditor (must support 1GB+ files)
+3. Fish
+
+7. Dataming with a debugger 
+1. Terminate rifterrorhandler
+2. Attach debugger
+3. Fish
+
+8. Reversing the client to get achievements/quests/soulchanges/etc
+"Hi TehFrank.
+It took a lot of RE work on the executable, that's where you will find your answers."

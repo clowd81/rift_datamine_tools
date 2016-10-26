@@ -1,0 +1,27 @@
+print "Warning: Input file does not store filenames!"
+
+ComType lzma2
+get ONE long
+get FILESIZE long
+get PADDING long
+get HSIZE long
+
+math HEADERS = HSIZE
+math HEADERS /= 60 # size of this structure:
+
+for h = 1 to HEADERS
+  getdstring UNKNOWN 20 # 5*4
+  get ZSIZE long
+  get SIZE long
+  get UNKNOWN long
+  get POINTER long
+  getdstring UNKNOWN 24 # 6*4
+if POINTER = 0x0 # Skip if the file is a dummy
+else
+  if ZSIZE == SIZE
+    log "" POINTER ZSIZE
+  else
+    clog "" POINTER ZSIZE SIZE
+  endif
+endif
+next h

@@ -1,0 +1,1 @@
+for /f %%f in ('dir /b') do wwise_ima_adpcm.exe -d %%f %%f.w

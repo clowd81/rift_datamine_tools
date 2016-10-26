@@ -1,0 +1,9 @@
+PAKS contains two "drag and droppable" batch files for the QuickBMS scripts
+You may want to change the hardcoded locations
+LZMA2 extracts the file as-is
+PAK extracts the file into a folder named after the file
+
+The Audio Tools contain many hard-to-find tools for working with WWise/RIFF/RIFX files
+The QuickBMS script contained in there will extract WWise BNKs but will not keep the names. It will rename the files to match their filetype
+BNKEXTR will preserve file names but will not do the renaming.
+You will still need the other tools to convert the files into a playable format.

@@ -1,0 +1,13 @@
+get BASENAME BASENAME
+ComType lzma2
+get ZSIZE asize
+set SIZE long 100000000000
+if SIZE <= 0
+    math SIZE = ZSIZE
+    math SIZE *= 20
+endif
+
+        print "ZSIZE %ZSIZE%, SIZE %SIZE%"
+
+        string FILENAME += ".lzma2"
+        clog BASENAME 0 ZSIZE SIZE
