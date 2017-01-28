@@ -1,17 +1,17 @@
 get TWAD long
-get ONE long
-get PADDING long
+get VERSION long
+get HEADERSIZE long
 get MAXSIZE long
-get IDK long
+get FILES long
  
 for h = 1 to MAXSIZE
-  getdstring UNKNOWN 8 # 2*4
+  getdstring ID 8 #  first 8 bytes from sha1hash of decompressed asset data
   get OFFSET long
   get SIZE long
   get ZSIZE long
   get POSITION short
   get COMPRESSED short
-  getdstring UNKNOWNTWO 20 # 5*4
+  getdstring SHA1HASH 20 # 5*4
   if OFFSET = 0x0 # Skip if the file is a dummy.
   else
                 if COMPRESSED = 0x0 # If the file's not compressed, extract without decompression.
