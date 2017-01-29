@@ -1,0 +1,39 @@
+Format
+
+Header
+=======
+4 bytes     - Little endian count of entries
+1024 bytes  - Little endian table of Huffman code frequencies, 256 symbols, 4 bytes each
+1025-?varies- Key/Value pairs. 
+            - First 4 bytes - random number generator seed - not sure of the purpose
+            - Variable - LEB128 unsigned encoded value, can read with the following function, unknown purpose, perhaps offset?        
+-----------
+public static int readUnsignedLeb128_X(final DataInputStream diss) throws IOException
+	{
+		int mungedByte = 0;
+		int i = 0;
+		int index = 0;
+		byte currentByte;
+
+		while (i < 35)
+		{
+			index = i;
+			i += 7;
+			currentByte = diss.readByte();
+			mungedByte |= (currentByte & 0x7f) << index;
+			if (currentByte > 0)
+			{
+				return mungedByte;
+			}
+		}
+
+		return 0;
+------------
+
+?-? varies- After reading the above entries then you have the data
+          - LEB128 compressed size
+          - LEB128 uncompressed size
+          - Then data
+            - Each data chunk is preceded by a variable number of bits, possibly Huffman code/table related, generally at least 64, havn't worked it out exactly yet.
+            - Then, the data is Huffman coded using the aforementioned Frequency Table.
+            - Can use some test code to print out the code with different bit skip amounts and pick one that sounds good.
