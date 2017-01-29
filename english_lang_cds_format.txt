@@ -4,7 +4,7 @@ Header
 =======
 4 bytes     - Little endian count of entries
 1024 bytes  - Little endian table of Huffman code frequencies, 256 symbols, 4 bytes each
-1025-?varies- Key/Value pairs. 
+?varies- Key/Value pairs. 
             - First 4 bytes - random number generator seed - not sure of the purpose
             - Variable - LEB128 unsigned encoded value, can read with the following function, unknown purpose, perhaps offset?        
 -----------
