@@ -55,8 +55,8 @@ It took a lot of RE work on the executable, that's where you will find your answ
 * ini - unknown but seems to contain model information
 * wav - Audio (see 4)
 * bkh - Audio (see 4)
-* nif - model/animation/wireframe data. Ones that don't appear to contain anything are likely texture/model blobs.
-* fxo - dunno
+* nif - model/animation/wireframe data. Ones that don't appear to contain anything are likely texture/model blobs.  Use Noesis to view.
+* fxo - Compiled DirectX shader
 * gfx - actually flash animations (see 5)
 * wawv - Havok Engine physics files
 
