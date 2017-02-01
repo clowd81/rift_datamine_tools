@@ -1,13 +1,7 @@
-import os
-from Assets import AssetDatabase
-from _io import BytesIO, StringIO
+from _io import BytesIO
 from LittleEndianDataInputStream import LittleEndianDataInputStream
 import ctypes
 from Utility import readUnsignedLeb128
-import binascii
-from ctypes import byref
-import sys
-from bz2 import compress
 
 class LangCDS(object):
     def __init__(self, database, language="english", filename="english_lang_cds.txt"):
