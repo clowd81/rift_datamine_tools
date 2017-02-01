@@ -39,13 +39,20 @@ class AssetDatabase(object):
             raise Exception("Could not find asset file for asset " + assetFilename)
         af.extractByName(assetFilename, filename)
 
+    def extractByOffset(self, assetFile, offset, filename):
+        """ extract the asset at the given offset in an assetfile """
+        for af in self.assets:
+            if af.assetName.lower() == assetFile.lower():
+                af.extractByOffset(offset, filename)
+                return
+
     def getAssetByFilename(self, filename):
         """ get information about the asset for the given file """
         _hash = Utility.FNV1Hash(filename)
         for af in self.assets:
             if af.hasNameHash(_hash):
                 return af.getAssetByNameHash(_hash)
-        return None;
+        return None
 
     def getAssetFileByName(self, filename):
         """Get the asset file that contains the file """
@@ -53,21 +60,21 @@ class AssetDatabase(object):
         for af in self.assets:
             if af.hasNameHash(_hash):
                 return af
-        return None;
+        return None
         
     def getAssetFileByEntry(self, entry):
         """Get the asset file that contains the file by its entry"""
         for af in self.assets:
             if af.hasID(entry.entryIDstr):
                 return af
-        return None;
+        return None
 
     def getAssetFileByID(self, _id):
         """Get the asset file that contains the file by its id"""
         for af in self.assets:
             if af.hasID(_id):
                 return af
-        return None;
+        return None
 
 class AssetEntry(object):
     """ An entry in the asset file """
@@ -96,22 +103,40 @@ class AssetFile(object):
         return self.assetIDEntryMap.values();
     
     def extractByEntry(self, entry: AssetEntry, destinationFile):
-        with open(self.assetName, "rb") as f:
-            f.seek(entry.offset)
-            data = f.read(entry.size)
-            with open(destinationFile, "wb") as output:
-                if entry.compressed:
-                    output.write(zlib.decompress(data)) 
-                else:
-                    output.write(data) 
+        f = open(self.assetName, "rb")
+        f.seek(entry.offset)
+        data = f.read(entry.size)
+            
+        output = open(destinationFile, "wb")
+        if entry.compressed:
+            output.write(zlib.decompress(data)) 
+        else:
+            output.write(data)
+        output.close()
+                    
     def extractByName(self, filename, destinationFile):
         _hash = Utility.FNV1Hash(filename)
-        self.extractByEntry(self.assetNameHashEntryMap[_hash], destinationFile)   
+        self.extractByEntry(self.assetNameHashEntryMap[_hash], destinationFile)
+        
     def extractByNameHash(self, _hash, destinationFile):
         self.extractByEntry(self.assetNameHashEntryMap[_hash], destinationFile)   
     
     def getAssetByNameHash(self, _hash):
         return self.assetNameHashEntryMap[_hash]
+
+    def extractByOffset(self, offset, destinationFile):
+        for ae in self.getassets():
+            if ae.offset == offset:
+                f = open(self.assetName, "rb")
+                f.seek(offset)
+                data = f.read(ae.size)
+                
+                output = open(destinationFile, "wb")
+                if ae.compressed:
+                    output.write(zlib.decompress(data)) 
+                else:
+                    output.write(data)
+                output.close()
     
     def hasID(self, _id):
         return _id in self.assetIDEntryMap
@@ -154,13 +179,10 @@ class AssetFile(object):
                         #print("No name to match for asset " + entryIDstr)
                         pass
                     
-                    
-        
 class Manifest(object):
     '''
     classdocs
     '''
- 
 
     def __init__(self, assetManifestFilename):
         self.nameEntryDict = {}
