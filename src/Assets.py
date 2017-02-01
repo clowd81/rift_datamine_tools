@@ -40,7 +40,7 @@ class AssetDatabase(object):
             raise Exception("Could not find asset file for asset " + assetFilename)
         af.extractByName(assetFilename, filename)
 
-		def extractByOffset(self, assetFile, offset, filename):
+    def extractByOffset(self, assetFile, offset, filename):
         """ extract the asset at the given offset in an assetfile """
         for af in self.assets:
             if af.assetName.lower() == assetFile.lower():
@@ -146,7 +146,7 @@ class AssetFile(object):
     def getAssetByNameHash(self, _hash):
         return self.assetNameHashEntryMap[_hash]
 
-		def extractByOffset(self, offset, destinationFile):
+    def extractByOffset(self, offset, destinationFile):
         for ae in self.getassets():
             if ae.offset == offset:
                 f = open(self.assetName, "rb")

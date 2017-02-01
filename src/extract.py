@@ -75,7 +75,8 @@ def extractUnencryptedTelaraDB(unencryptedDBFilename, extractDirectory):
     # WARNING:    You may wish to filter the first query by a specific datasetId, eg:
     # WARNING:    ds.execute('SELECT * from dataset where datasetId=?', (7701,))
     #
-    ###############    TEST_MODE = True
+    ###############    
+    TEST_MODE = True
     test_mode_ids = set()  
 
     ds.execute('SELECT * from dataset order by length(value) desc')
@@ -135,7 +136,7 @@ if __name__ == '__main__':
     except FileExistsError:
         pass
     
-        # Extract and decrypt telara, it will create a file called 'telara_decrypted.db'
+    # Extract and decrypt telara, it will create a file called 'telara_decrypted.db'
     extractAndDecryptTelaraDB(db)
     extractUnencryptedTelaraDB('telara_decrypted.db', extractDirectory)
     # extract the lang cds to "cds.txt"
