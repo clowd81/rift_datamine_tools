@@ -3,6 +3,7 @@ from LittleEndianDataInputStream import LittleEndianDataInputStream
 import binascii
 import os
 import zlib
+from io import BytesIO
 import Utility
 from _ctypes import ArgumentError
 
@@ -39,12 +40,19 @@ class AssetDatabase(object):
             raise Exception("Could not find asset file for asset " + assetFilename)
         af.extractByName(assetFilename, filename)
 
-    def extractByOffset(self, assetFile, offset, filename):
+		def extractByOffset(self, assetFile, offset, filename):
         """ extract the asset at the given offset in an assetfile """
         for af in self.assets:
             if af.assetName.lower() == assetFile.lower():
                 af.extractByOffset(offset, filename)
                 return
+        
+    def extractByNameToMemory(self, assetFilename, bytesIOStream):
+        """extract the asset with the given filename to the file given filename"""
+        af = self.getAssetFileByName(assetFilename)
+        if af == None:
+            raise Exception("Could not find asset file for asset " + assetFilename)
+        af.extractByNameToMemory(assetFilename, bytesIOStream)
 
     def getAssetByFilename(self, filename):
         """ get information about the asset for the given file """
@@ -113,18 +121,32 @@ class AssetFile(object):
         else:
             output.write(data)
         output.close()
+    
+    def extractByEntryToMemory(self, entry: AssetEntry, bytesIOStream):
+        f = open(self.assetName, "rb")
+        f.seek(entry.offset)
+        data = f.read(entry.size)
+        if entry.compressed:
+            bytesIOStream.write(zlib.decompress(data)) 
+        else:
+            bytesIOStream.write(data)       
+        f.close()
+                
+    def extractByNameToMemory(self, filename, bytesIOStream):
+        _hash = Utility.FNV1Hash(filename)
+        self.extractByEntryToMemory(self.assetNameHashEntryMap[_hash], bytesIOStream)   
                     
     def extractByName(self, filename, destinationFile):
         _hash = Utility.FNV1Hash(filename)
-        self.extractByEntry(self.assetNameHashEntryMap[_hash], destinationFile)
-        
+        self.extractByEntry(self.assetNameHashEntryMap[_hash], destinationFile)   
+    
     def extractByNameHash(self, _hash, destinationFile):
         self.extractByEntry(self.assetNameHashEntryMap[_hash], destinationFile)   
     
     def getAssetByNameHash(self, _hash):
         return self.assetNameHashEntryMap[_hash]
 
-    def extractByOffset(self, offset, destinationFile):
+		def extractByOffset(self, offset, destinationFile):
         for ae in self.getassets():
             if ae.offset == offset:
                 f = open(self.assetName, "rb")
@@ -179,10 +201,13 @@ class AssetFile(object):
                         #print("No name to match for asset " + entryIDstr)
                         pass
                     
+                    
+        
 class Manifest(object):
     '''
     classdocs
     '''
+ 
 
     def __init__(self, assetManifestFilename):
         self.nameEntryDict = {}
