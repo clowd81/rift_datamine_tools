@@ -8,6 +8,19 @@ class LittleEndianDataInputStream:
     def __init__(self, stream):
         self.stream = stream
 
+    def read_bytes(self, length):
+        return self.stream.read(length)
+
+    def read(self, length):
+        return self.stream.read(length)
+    
+    def read_string(self, length):
+        b = self.read_bytes(length)
+        try:
+            return b.decode("utf-8")
+        except UnicodeDecodeError:
+            return "byte data"
+    
     def read_boolean(self):
         return struct.unpack('?', self.stream.read(1))[0]
 
