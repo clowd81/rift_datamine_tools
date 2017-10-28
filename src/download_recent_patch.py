@@ -7,10 +7,10 @@ import time
 
 # Glyph log file location (Windows 10)
 ## MODIFY BELOW TO POINT TO YOUR GLYPH LOG DIRECTORY AND TO THE LOG FILE TO PARSE FOR DOWNLOADS! ##
-glyph_log = "C:\\Users\\Clowd\\AppData\\Local\\Glyph\\Logs\\GlyphClient.0.log"
+glyph_log = "C:\\Users\\Kyle\\AppData\\Local\\Glyph\\Logs\\GlyphClient.2.log"
 
 # Directory to download and extract assets
-output_dir = "E:\\RIFT\\datamine\\oct25\\"
+output_dir = "E:\\RIFT\\datamine\\apr28-pts-paks\\"
 
 def download_patch():
     log = open(glyph_log)
@@ -61,7 +61,7 @@ def extract_lzma2():
 
 def extract_pak():
     asset_files = os.listdir(output_dir)
-    
+
     # Extract PAK files into folders
     for asset in asset_files:
         if asset[-3:] == "pak":
@@ -73,7 +73,7 @@ def extract_pak():
             print "Extrating assets from " + asset_path + " to " + output_path
             proc = subprocess.Popen([quickbms_exe, quickbms_riftpak, asset_path, output_path])
             time.sleep(15)
-            proc.terminate() 
+            proc.terminate()
 
 def nif_try_rename(filename):
     file_size = os.path.getsize(filename)
@@ -83,7 +83,7 @@ def nif_try_rename(filename):
     nif_creation_info = nif_file_start.find('NIF Creation Information')
     nif_texture_info = nif_file_start.find('.dds')
     nif_filename = None
-    
+
     if (nif_creation_info > 0):
         nif_creation_start = nif_creation_info + 28
         nif_creation_end = nif_file_start.find('.ma')

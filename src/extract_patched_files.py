@@ -5,8 +5,8 @@ from extract import *
 ### RENAME THESE PATHS TO POINT TO THE CORRECT FILE OR DIRECTORY ON YOUR SYSTEM! ###
 #rift_dir = "E:\\RIFT\\PTS\\"
 rift_dir = "C:\\Program Files (x86)\\Glyph\\Games\\RIFT\\Live\\"
-glyph_log = "C:\\Users\\Kyle\\AppData\\Local\\Glyph\\Logs\\GlyphClient.2.test.log"
-output_dir = "E:\\RIFT\\datamine\\feb01-live\\"
+glyph_log = "C:\\Users\\Kyle\\AppData\\Local\\Glyph\\Logs\\GlyphClient.0.log"
+output_dir = "E:\\RIFT\\datamine\\oct25-live-43\\"
 
 asset_db = Assets.AssetDatabase(rift_dir)
 
@@ -24,7 +24,7 @@ def rename_partbatch_nif(filename):
     the model's primary texture to use as a name.
     """
     nif_file = open(filename, "rb")
-    
+
     nif_file_start = str(nif_file.read(4096))
     nif_creation_info = nif_file_start.find('NIF Creation Information')
     nif_texture_info = nif_file_start.find('.dds')
@@ -53,22 +53,22 @@ def rename_file_by_type(filename):
 
             if "partBatch_temp" in nifFilename:
                 rename = filename + "_" + rename_partbatch_nif(filename) + ".nif"
-            
+
             if not os.path.exists(rename):
                 os.rename(filename, rename)
 
             extract_nif_textures(rename, filename[:filename.rfind('\\')] + "\\")
         elif 'DDS' in start_data:
             rename = filename + ".dds"
-            
+
             if not os.path.exists(rename):
                 os.rename(filename, rename)
         elif 'Exif' in start_data:
             rename = filename + ".jpg"
-            
+
             if not os.path.exists(rename):
                 os.rename(filename, rename)
-        
+
 def extract_patch():
     log = open(glyph_log)
     log_lines = log.readlines()
@@ -104,6 +104,6 @@ def extract_patch():
             asset_db.extractByOffset(asset_file, asset_offset, output_name)
 
             rename_file_by_type(output_name)
-            
+
 if __name__ == '__main__':
     extract_patch()
