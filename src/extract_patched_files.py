@@ -28,7 +28,7 @@ def rename_partbatch_nif(filename):
     nif_file_start = str(nif_file.read(4096))
     nif_creation_info = nif_file_start.find('NIF Creation Information')
     nif_texture_info = nif_file_start.find('.dds')
-    nif_filename = filename
+    nif_filename = ""
 
     if (nif_texture_info > 0):
         nif_texture_end = nif_texture_info
@@ -89,6 +89,7 @@ def extract_patch():
             asset_pak = line.split('PAK')[1].split('/')[-1].split('.')[0]
             asset_file = rift_dir + "Assets\\" + line.split('Assets\\')[1][:10]
             asset_offset = int(line.split('offset')[1].split(' ')[1])
+            asset_hash = line.split('hash ')[1][:-1]
 
             #print(asset_pak, asset_file, asset_offset)
 
