@@ -1,4 +1,4 @@
-import urllib2
+from urllib.request import urlopen
 
 import fnmatch
 import os
@@ -7,17 +7,17 @@ import time
 
 # Glyph log file location (Windows 10)
 ## MODIFY BELOW TO POINT TO YOUR GLYPH LOG DIRECTORY AND TO THE LOG FILE TO PARSE FOR DOWNLOADS! ##
-glyph_log = "C:\\Users\\Kyle\\AppData\\Local\\Glyph\\Logs\\GlyphClient.2.log"
+glyph_log = "C:\\Users\\Kyle\\AppData\\Local\\Glyph\\Logs\\GlyphClient.0.log"
 
 # Directory to download and extract assets
-output_dir = "E:\\RIFT\\datamine\\apr28-pts-paks\\"
+output_dir = "E:\\RIFT\\datamine\\feb23-pts-pak\\"
 
 def download_patch():
     log = open(glyph_log)
     log_lines = log.readlines()
 
     if not os.path.exists(output_dir):
-        print "Making directory: " + output_dir
+        print("Making directory: " + output_dir)
         os.mkdir(output_dir)
 
     # Search the Glyph log indicated above for patch files to download
@@ -26,16 +26,16 @@ def download_patch():
             download_loc = line.split(' ')[4].rstrip()
             filename = download_loc.split('/')[-1:][0].split('?')[0].rstrip()
 
-            print "Downloading from " + download_loc + " to " + output_dir + filename
+            print("Downloading from " + download_loc + " to " + output_dir + filename)
             try:
-                response = urllib2.urlopen(download_loc)
+                response = urlopen(download_loc)
                 data = response.read()
 
                 f = open(output_dir + filename, "wb")
                 f.write(data)
                 f.close()
             except:
-                print "failed to download " + download_loc
+                print("failed to download " + download_loc)
 
     log.close()
 
@@ -54,7 +54,7 @@ def extract_lzma2():
     for asset in asset_files:
         if (asset[-5:] == "lzma2") and ("physics" not in asset):
             asset_path = output_dir + asset
-            print "Extrating assets from " + asset_path + " to " + output_dir
+            print("Extrating assets from " + asset_path + " to " + output_dir)
             proc = subprocess.Popen([quickbms_exe, quickbms_riftlzma, asset_path, output_dir])
             time.sleep(5)
             proc.terminate()
@@ -68,9 +68,9 @@ def extract_pak():
             asset_path = output_dir + asset
             output_path = output_dir +  asset.split('.')[0]
             if not os.path.exists(output_path):
-                print "Making directory: " + output_path
+                print("Making directory: " + output_path)
                 os.mkdir(output_path)
-            print "Extrating assets from " + asset_path + " to " + output_path
+            print("Extrating assets from " + asset_path + " to " + output_path)
             proc = subprocess.Popen([quickbms_exe, quickbms_riftpak, asset_path, output_path])
             time.sleep(15)
             proc.terminate()
@@ -99,7 +99,7 @@ def nif_try_rename(filename):
     if (nif_filename != None):
         rename = filename[:-12] + nif_filename + '_' + filename[-12:] + '.nif'
 
-        print "Renaming nif file: " + filename + " to " + nif_filename + '.nif'
+        print("Renaming nif file: " + filename + " to " + nif_filename + '.nif')
 
         os.rename(filename, rename)
         return True
@@ -118,4 +118,4 @@ extract_lzma2()
 extract_pak()
 rename_nif_files()
 
-print "Done!"
+print("Done!")

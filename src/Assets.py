@@ -238,7 +238,7 @@ class Manifest(object):
                 
                 
                 # each manifest entry is 56 bytes but we only actually read the first 12, we don't know what the rest are
-                entrySize = 56;
+                entrySize = 58;
                 for i in range(0, count):
                     start = tableOffset + (i * entrySize)
                     f.seek(start)

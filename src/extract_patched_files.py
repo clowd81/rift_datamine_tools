@@ -3,10 +3,10 @@ import os
 from extract import *
 
 ### RENAME THESE PATHS TO POINT TO THE CORRECT FILE OR DIRECTORY ON YOUR SYSTEM! ###
-#rift_dir = "E:\\RIFT\\PTS\\"
-rift_dir = "C:\\Program Files (x86)\\Glyph\\Games\\RIFT\\Live\\"
+rift_dir = "E:\\RIFT\\PTS\\"
+#rift_dir = "C:\\Program Files (x86)\\Glyph\\Games\\RIFT\\Live\\"
 glyph_log = "C:\\Users\\Kyle\\AppData\\Local\\Glyph\\Logs\\GlyphClient.0.log"
-output_dir = "E:\\RIFT\\datamine\\oct25-live-43\\"
+output_dir = "E:\\RIFT\\datamine\\feb23-pts\\"
 
 asset_db = Assets.AssetDatabase(rift_dir)
 
